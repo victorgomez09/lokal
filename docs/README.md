@@ -6,6 +6,9 @@ Point to the files you already have, where they already are located, Lokal store
 This works great for e.g. exposing an entire user share from unraid.
 
 
+![Files page preview](https://github.com/didair/lokal/blob/main/docs/lokal_screenshot.png)
+
+
 ## Prerequisites
 - Docker
 - Docker Compose
