@@ -68,6 +68,7 @@ export const DirInput = (props: any) => {
 						{options.map((dir) => {
 							return (
 								<div
+									key={dir.name}
 									className={cn("py-2 px-4 hover:bg-muted cursor-pointer rounded-lg", {
 										"bg-rose-500 hover:bg-rose-600 text-gray-50": dir.name == selectedDir,
 									})}
