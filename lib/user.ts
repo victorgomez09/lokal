@@ -22,6 +22,7 @@ export type User = {
 	password?: string;
 	createdAt: Date,
 	updatedAt: Date,
+	role: string,
 };
 
 // Todo: Generate this on start (?) and store in .env file (?) or maybe somewhere in the process

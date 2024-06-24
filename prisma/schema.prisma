@@ -29,3 +29,11 @@ model Setting {
   id            String    @id @unique
   value         String
 }
+
+model InviteLink {
+  id            String    @id @default(cuid())
+  used          Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  rootDir       String    @default("")
+  role          String    @default("U")
+}

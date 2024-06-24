@@ -1,3 +1,4 @@
+import { NewUserDialog } from "@/components/blocks/newuserdialog";
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -93,7 +94,9 @@ export default async function Settings() {
 					</Table>
 
 					<div className="p-4 flex">
-						<Button className="ml-auto">Add user</Button>
+						<NewUserDialog>
+							<Button className="ml-auto">Add user</Button>
+						</NewUserDialog>
 					</div>
 				</Card>
 			</div>
