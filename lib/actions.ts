@@ -1,7 +1,7 @@
 'use server';
 
 import { redirect } from "next/navigation";
-import { signIn, createUser, destroyCurrentSession } from "./user";
+import { signIn, createUser, destroyCurrentSession, getCurrentSession, User } from "./user";
 import { revalidatePath } from "next/cache";
 import prisma from "./prisma";
 
@@ -13,35 +13,53 @@ export async function authenticateAction(formData: FormData) {
 		throw new Error(error);
 	});
 
-	console.log('login user', user);
-
 	if (user) {
-		redirect('/');
+		return redirect('/');
 	}
 
-	return user;
+	return revalidatePath('/login');
 };
 
 export async function registerAction(formData: FormData) {
-	console.log('REGISTER ACTION', formData);
+	const inviteId = formData.get('inviteId')?.toString() ?? '';
+	const invite = await getInvite(inviteId);
+
+	if (invite == null || invite.used) {
+		throw new Error('Invite invalid!');
+	}
+
 	const user = await createUser({
 		email: formData.get('email')?.toString() ?? '',
 		password: formData.get('password')?.toString() ?? '',
 		name: (formData.get('first-name')?.toString() ?? '') + ' ' + (formData.get('last-name')?.toString() ?? ''),
+		rootDir: invite.rootDir,
+		role: invite.role,
 	}).catch((error) => {
-		console.log('auth error', error);
+		throw new Error('Could not register user. Message: ' + error);
 	});
 
 	if (user) {
-		redirect('/');
+		// Set inviteLink as expired
+		await prisma.inviteLink.update({
+			where: { id: inviteId },
+			data: { used: true },
+		});
+
+		return redirect('/');
 	}
 
-	revalidatePath('/register');
+	return revalidatePath('/register');
+};
 
-	return user;
+export async function logoutAction() {
+	destroyCurrentSession();
+	redirect('/login');
 };
 
 export async function saveServerSettings(formData: FormData) {
+	const owner = await isUserOwner();
+	if (!owner) { return false; }
+
 	await prisma.setting.upsert({
 		where: { id: 'server-name' },
 		update: { value: formData.get('server-name')?.toString() ?? '' },
@@ -57,9 +75,13 @@ export async function saveServerSettings(formData: FormData) {
 };
 
 export async function getServerSettings() {
+	const owner = await isUserOwner();
+
 	const response = {
 		serverName: '',
 	};
+
+	if (!owner) { return response; }
 
 	await prisma.setting.findUnique({
 		where: { id: 'server-name' },
@@ -69,6 +91,9 @@ export async function getServerSettings() {
 };
 
 export async function getServerUsers() {
+	const owner = await isUserOwner();
+	if (!owner) { return []; }
+
 	const users = await prisma.user.findMany({
 		select: {
 			id: true,
@@ -81,14 +106,7 @@ export async function getServerUsers() {
 		}
 	});
 
-	console.log('users', users);
-
 	return users;
-};
-
-export async function logoutAction() {
-	destroyCurrentSession();
-	redirect('/login');
 };
 
 export async function getServerName() {
@@ -101,3 +119,22 @@ export async function getServerName() {
 	return name?.value ?? '';
 };
 
+export async function getCurrentUser(): Promise<User> {
+	const session = await getCurrentSession();
+	return (session as any).user;
+};
+
+export async function isUserOwner(): Promise<boolean> {
+	const user = await getCurrentUser();
+	return user.role === 'O';
+}
+
+export async function getInvite(inviteId: string) {
+	const invite = await prisma.inviteLink.findUnique({
+		where: {
+			id: inviteId,
+		},
+	});
+
+	return invite;
+};

@@ -22,7 +22,6 @@ export const ItemTableRow = ({
 	let pre = '/files/?dir=';
 
 	const onItemDoubleClick = () => {
-		console.log('item double click');
 	};
 
 	return (

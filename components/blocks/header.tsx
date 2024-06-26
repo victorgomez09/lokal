@@ -4,10 +4,11 @@ import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu"
-import { getServerName, logoutAction } from "@/lib/actions";
+import { getCurrentUser, getServerName, logoutAction } from "@/lib/actions";
 
 export const Header = async () => {
 	const server_name = await getServerName();
+	const current_user = await getCurrentUser();
 
 	return (
 		<header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
@@ -112,8 +113,9 @@ export const Header = async () => {
 							<span className="sr-only">Toggle user menu</span>
 						</Button>
 					</DropdownMenuTrigger>
+
 					<DropdownMenuContent align="end">
-						<DropdownMenuLabel>My Account</DropdownMenuLabel>
+						<DropdownMenuLabel>{current_user.name}</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem>
 							<Link href="/settings">

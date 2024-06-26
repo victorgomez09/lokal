@@ -13,6 +13,8 @@ export type NewUser = {
 	email: string;
 	password: string;
 	name: string;
+	rootDir: string;
+	role: string;
 };
 
 export type User = {
@@ -48,7 +50,6 @@ export const signIn = async (credentials: Credentials): Promise<User> => {
 			role: true,
 		},
 	});
-
 
 	if (user) {
 		const session = await createSession(user);

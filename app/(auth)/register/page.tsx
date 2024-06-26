@@ -1,6 +1,10 @@
-import { registerAction } from "@/lib/actions"
-import Link from "next/link"
+"use client";
 
+import { useState, useEffect } from "react";
+import { InviteLink } from "@prisma/client";
+import { getInvite, registerAction } from "@/lib/actions"
+
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {
 	Card,
@@ -12,9 +16,44 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export default function Register() {
+type SearchParams = {
+	invite?: string,
+};
+
+export default function Register({
+	searchParams,
+}: { searchParams: SearchParams }) {
+	const [invite, setInvite] = useState<InviteLink | null>(null);
+	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			if (searchParams.invite == null) {
+				return;
+			}
+
+			const invite = await getInvite(searchParams.invite);
+			setInvite(invite);
+		};
+
+		fetchData();
+	}, []);
+
+	const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const formData = new FormData(event.target as any);
+		await registerAction(formData).catch((error: Error) => {
+			setError(error.message);
+		});
+	};
+
+	if (invite == null || invite.used) {
+		// Invite not valid
+		return null;
+	}
+
 	return (
-		<div className="w-full h-full flex items-center justify-center">
+		<div className="w-full h-full flex items-center justify-center flex-col">
 			<Card className="mx-auto max-w-sm">
 				<CardHeader>
 					<CardTitle className="text-xl">Sign Up</CardTitle>
@@ -24,7 +63,7 @@ export default function Register() {
 				</CardHeader>
 
 				<CardContent>
-					<form action={registerAction}>
+					<form onSubmit={onSubmit}>
 						<div className="grid gap-4">
 							<div className="grid grid-cols-2 gap-4">
 								<div className="grid gap-2">
@@ -53,6 +92,8 @@ export default function Register() {
 								<Input name="password" type="password" />
 							</div>
 
+							<Input type="hidden" value={invite.id} name="inviteId" />
+
 							<Button type="submit" className="w-full">
 								Create an account
 							</Button>
@@ -67,6 +108,12 @@ export default function Register() {
 					</div>
 				</CardContent>
 			</Card>
+
+			{error ?
+				<div className="text-red-500 font-medium mt-2 text-center">
+					{error}
+				</div>
+			: null}
 		</div>
 	)
 }
