@@ -5,10 +5,8 @@ import { File } from "@/lib/file-utils";
 import Link from "next/link";
 import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem } from "../ui/context-menu";
 import { FileIcon, FolderIcon, CircleAlertIcon } from "lucide-react";
-import { Button } from "../ui/button";
 import { TableRow, TableCell } from "../ui/table";
-import { Icon } from "../icon";
-import { formatDate, slugify } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 export const ItemTableRow = ({
 	file,
