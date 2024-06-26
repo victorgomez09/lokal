@@ -25,6 +25,7 @@ export type User = {
 	createdAt: Date,
 	updatedAt: Date,
 	role: string,
+	rootDir: string,
 };
 
 // Todo: Generate this on start (?) and store in .env file (?) or maybe somewhere in the process
@@ -47,6 +48,7 @@ export const signIn = async (credentials: Credentials): Promise<User> => {
 			createdAt: true,
 			updatedAt: true,
 			password: false,
+			rootDir: true,
 			role: true,
 		},
 	});

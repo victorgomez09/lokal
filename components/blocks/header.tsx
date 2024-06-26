@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { getCurrentUser, getServerName, logoutAction } from "@/lib/actions";
+import FileUpload from "./fileupload";
 
 export const Header = async () => {
 	const server_name = await getServerName();
@@ -101,6 +102,8 @@ export const Header = async () => {
 			</div>
 
 			<div className="ml-auto flex items-center gap-2">
+				<FileUpload />
+
 				<Button variant="secondary" size="icon" className="rounded-full">
 					<BellIcon className="h-5 w-5" />
 					<span className="sr-only">Toggle notifications</span>

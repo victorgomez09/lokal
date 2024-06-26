@@ -78,10 +78,6 @@ export const ItemTableRow = ({
 
 					{/* Size */}
 					<TableCell>{file.type == 'dir' ? '-' : file.size}</TableCell>
-
-					{/* Actions */}
-					<TableCell>
-					</TableCell>
 				</TableRow>
 			</ContextMenuTrigger>
 
