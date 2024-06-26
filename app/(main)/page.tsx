@@ -17,7 +17,7 @@ export default async function Home() {
 				</BreadcrumbList>
 			</Breadcrumb>
 
-			<div className="flex items-center">
+			<div className="flex flex-col">
 				<h1 className="text-lg font-semibold md:text-2xl">Dashboard</h1>
 			</div>
 		</>
