@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dropzone from 'dropzone'
 import { cn } from '@/lib/utils';
 import { CloudUpload } from 'lucide-react';
@@ -23,9 +23,15 @@ const FileUpload: React.FC = () => {
 		}
 
 		new Dropzone(document.body, {
-			url: '/api/upload',
+			url: () => {
+				let moreData = '';
+				if (window.location.pathname == '/files') {
+					moreData = `?path=${localStorage.getItem('currentFilePath')}`;
+				}
+
+				return '/api/upload' + moreData;
+			},
 			addedfile(file) {
-				console.log('added file', file);
 				setUploading(true);
 				const uploadTask: UploadTask = {
 					file,
@@ -37,7 +43,6 @@ const FileUpload: React.FC = () => {
 				setUploadQueue(prevQueue => [...prevQueue, uploadTask]);
 			},
 			uploadprogress(file, progress, bytesSent) {
-				console.log('progress file', file.name, progress);
 				setUploadQueue(prevQueue =>
 					prevQueue.map(task => task.file === file ? { ...task, progress: progress } : task)
 				);
@@ -46,6 +51,9 @@ const FileUpload: React.FC = () => {
 				setUploadQueue(prevQueue =>
 					prevQueue.map(task => task.file === file ? { ...task, status: file.status } : task)
 				);
+
+				const uploadEvent = new Event('FILE_COMPLETE');
+				window.dispatchEvent(uploadEvent);
 			},
 			queuecomplete() {
 				setTimeout(() => {
@@ -107,7 +115,9 @@ const FileUpload: React.FC = () => {
 						</div>
 						: null}
 
-					{uploadQueue.map((task, index) => {
+					{[...uploadQueue]
+					.reverse()
+					.map((task, index) => {
 						return (
 							<div className="text-sm border-b border-b-zinc-200 last-of-type:border-b-0" key={index}>
 								<div className="flex px-3 py-1 flex-col">

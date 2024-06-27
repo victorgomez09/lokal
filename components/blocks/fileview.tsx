@@ -12,7 +12,7 @@ export const FileView = () => {
 	const [path, setPath] = useState('/');
 	const [parent, setParent] = useState<string | null>(null);
 
-	useEffect(() => {
+	const fetchData = (path: string) => {
 		fetch('/api/files', {
 			method: 'POST',
 			headers: {
@@ -34,6 +34,24 @@ export const FileView = () => {
 				};
 			}));
 		});
+	}
+
+	useEffect(() => {
+		const eventListener = () => {
+			fetchData(path);
+		};
+
+		window.addEventListener('FILE_COMPLETE', eventListener);
+
+		return () => {
+			window.removeEventListener('FILE_COMPLETE', eventListener);
+		}
+	}, [path]);
+
+	useEffect(() => {
+		fetchData(path);
+
+		localStorage.setItem('currentFilePath', path);
 	}, [path]);
 
 	const onItemClick = (item: File) => {

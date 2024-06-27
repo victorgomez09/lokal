@@ -10,7 +10,11 @@ export const POST = async (request: NextRequest) => {
 	const body = Object.fromEntries(formData);
 	const file = (body.file as Blob) || null;
 	const user = await getCurrentUser();
-	const target = path.join(UPLOAD_DIR, user.rootDir);
+	let target = path.join(UPLOAD_DIR, user.rootDir);
+
+	if (request.nextUrl.searchParams.get('path') != null) {
+		target = path.join(target, request.nextUrl.searchParams.get('path') ?? '');
+	}
 
 	if (file) {
 		const buffer = Buffer.from(await file.arrayBuffer());
