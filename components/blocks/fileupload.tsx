@@ -120,8 +120,10 @@ const FileUpload: React.FC = () => {
 					.map((task, index) => {
 						return (
 							<div className="text-sm border-b border-b-zinc-200 last-of-type:border-b-0" key={index}>
-								<div className="flex px-3 py-1 flex-col">
-									{task.fileName}
+								<div className="flex px-3 py-1 flex-col max-w-96">
+									<div className="truncate" title={task.fileName}>
+										{task.fileName}
+									</div>
 
 									<div className="flex gap-2 items-center">
 										<div
