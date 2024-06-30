@@ -84,11 +84,14 @@ export const createUser = async (user: NewUser) => {
 };
 
 export const createSession = async (user: User) => {
-	const expires = new Date(Date.now() + (60 * 60 * 24 * 7)); // Set session expiration time (1 week from now)
+	const expires = (24 * 60 * 60) * 7; // 7 days in seconds
 	const session = await encrypt({ user, expires }); // Encrypt user data and set expiration time
 
 	// Save the session in a cookie
-	cookies().set("session", session, { expires, httpOnly: true }); // Set session cookie with expiration time and HTTP only flag
+	cookies().set("session", session, {
+		maxAge: expires,
+		httpOnly: true
+	});
 
 	return session;
 };
