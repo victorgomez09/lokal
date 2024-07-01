@@ -33,7 +33,7 @@ const sessionKeySecret = "94F20455ADC1C4265A987450D5C96EDBC8E551C4E90A232D419AB0
 
 export const hashPassword = (string: string): string => {
 	return SHA256(string).toString();
-}
+};
 
 export const signIn = async (credentials: Credentials): Promise<User> => {
 	const user = await prisma.user.findUnique({

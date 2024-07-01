@@ -23,10 +23,19 @@ const FileUpload: React.FC = () => {
 		}
 
 		new Dropzone(document.body, {
-			url: () => {
+			url: (files) => {
 				let moreData = '';
 				if (window.location.pathname == '/files') {
 					moreData = `?path=${localStorage.getItem('currentFilePath')}`;
+				}
+
+				if ((files[0] as any).fullPath != null) {
+					let split = ((files[0] as any).fullPath as string).split('/');
+					if (split.length > 0) {
+						split.slice(0,-1).forEach((path) => {
+							moreData += '/' + path;
+						});
+					}
 				}
 
 				return '/api/upload' + moreData;
