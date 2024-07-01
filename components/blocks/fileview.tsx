@@ -1,5 +1,6 @@
 "use client";
 
+import pathFs from 'path';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { ItemTableRow } from "@/components/blocks/itemtablerow"
 import { useEffect, useState } from "react";
@@ -56,7 +57,7 @@ export const FileView = () => {
 
 	const onItemClick = (item: File) => {
 		if (item.type == 'dir') {
-			setPath(path + item.name)
+			setPath(pathFs.join(path, item.name))
 		}
 	}
 
