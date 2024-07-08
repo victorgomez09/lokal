@@ -7,11 +7,13 @@ import { useEffect, useState } from "react";
 import { File } from "@/lib/file-utils";
 import Link from "next/link";
 import { FolderUp } from "lucide-react";
+import { useRouter } from 'next/navigation';
 
 export const FileView = () => {
 	const [files, setFiles] = useState<File[]>([]);
 	const [path, setPath] = useState('/');
 	const [parent, setParent] = useState<string | null>(null);
+	const router = useRouter();
 
 	const fetchData = (path: string) => {
 		fetch('/api/files', {
@@ -24,29 +26,47 @@ export const FileView = () => {
 				path: path,
 			}),
 		})
-		.then(async (response) => {
-			const body = await response.json();
+			.then(async (response) => {
+				const body = await response.json();
 
-			setParent(body.parent);
-			setFiles(body.files.map((file: File) => {
-				return {
-					...file,
-					date: new Date(file.date),
-				};
-			}));
-		});
+				setParent(body.parent);
+				setFiles(body.files.map((file: File) => {
+					return {
+						...file,
+						date: new Date(file.date),
+					};
+				}));
+			});
 	}
+
+	useEffect(() => {
+		const handlePopState = (event: PopStateEvent) => {
+			if (parent != null) {
+				goParent(null);
+			}
+		};
+
+		window.addEventListener('popstate', handlePopState);
+
+		// Cleanup the event listener on component unmount
+		return () => {
+			window.removeEventListener('popstate', handlePopState);
+		};
+	}, [router, parent]);
 
 	useEffect(() => {
 		const eventListener = () => {
 			fetchData(path);
 		};
 
-		window.addEventListener('FILE_COMPLETE', eventListener);
-
-		return () => {
-			window.removeEventListener('FILE_COMPLETE', eventListener);
+		if (path != '/') {
+			router.push('/files?path=' + path, {
+				scroll: false
+			});
 		}
+
+		window.addEventListener('FILE_COMPLETE', eventListener);
+		return () => window.removeEventListener('FILE_COMPLETE', eventListener);
 	}, [path]);
 
 	useEffect(() => {
@@ -62,7 +82,7 @@ export const FileView = () => {
 	}
 
 	const goParent = (event: any) => {
-		event.preventDefault();
+		event?.preventDefault();
 		setPath(parent ?? '/');
 	}
 
@@ -93,7 +113,7 @@ export const FileView = () => {
 						<TableCell></TableCell>
 						<TableCell></TableCell>
 					</TableRow>
-				: null}
+					: null}
 
 				{[...files]
 					.sort((file) => file.type == 'dir' ? -1 : 1)
