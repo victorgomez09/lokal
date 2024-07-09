@@ -68,7 +68,7 @@ const FileUpload: React.FC = () => {
 				setTimeout(() => {
 					setUploading(false);
 				}, 1000 * 5)
-			}
+			},
 		});
 	}, []);
 

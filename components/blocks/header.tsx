@@ -121,19 +121,21 @@ export const Header = async () => {
 					<DropdownMenuContent align="end">
 						<DropdownMenuLabel>{current_user.name}</DropdownMenuLabel>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>
-							<Link href="/settings">
+						<DropdownMenuItem asChild>
+							<Link href="/settings" className="cursor-pointer">
 								Settings
 							</Link>
 						</DropdownMenuItem>
-						<DropdownMenuItem>
-							<a target="_blank" href="https://github.com/didair/lokal/wiki">
+						<DropdownMenuItem asChild>
+							<a target="_blank" className="cursor-pointer" href="https://github.com/didair/lokal/wiki">
 								Wiki
 							</a>
 						</DropdownMenuItem>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>
-							Logout
+						<DropdownMenuItem asChild>
+							<Link href="/logout" className="cursor-pointer">
+								Logout
+							</Link>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
