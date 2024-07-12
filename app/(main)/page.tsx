@@ -1,12 +1,14 @@
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb"
+import { getServerName } from "@/lib/actions"
 
 export default async function Home() {
+	const server_name = getServerName();
 	return (
 		<>
 			<Breadcrumb>
 				<BreadcrumbList>
 					<BreadcrumbItem>
-						<BreadcrumbLink href="/">Skurt</BreadcrumbLink>
+						<BreadcrumbLink href="/">{server_name}</BreadcrumbLink>
 					</BreadcrumbItem>
 
 					<BreadcrumbSeparator>/</BreadcrumbSeparator>
