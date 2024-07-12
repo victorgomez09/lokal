@@ -17,8 +17,6 @@ export const ItemTableRow = ({
 	onClick?: (file: File) => void,
 	onNavigate?: (file: File) => void,
 }) => {
-	let pre = '/files/?dir=';
-
 	const onItemDoubleClick = () => {
 	};
 
@@ -80,7 +78,14 @@ export const ItemTableRow = ({
 			</ContextMenuTrigger>
 
 			<ContextMenuContent>
-				<ContextMenuItem>Download</ContextMenuItem>
+				{file.type == 'file' ?
+					<ContextMenuItem asChild>
+						<a href={`/file/u?path=${file.name}`} target="_blank" className="cursor-pointer">
+							Download
+						</a>
+					</ContextMenuItem>
+				: null}
+
 				<ContextMenuItem>Share</ContextMenuItem>
 				<ContextMenuItem>Rename</ContextMenuItem>
 				<ContextMenuItem>Delete</ContextMenuItem>
