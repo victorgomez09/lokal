@@ -7,6 +7,8 @@ import { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem } 
 import { FileIcon, FolderIcon, CircleAlertIcon } from "lucide-react";
 import { TableRow, TableCell } from "../ui/table";
 import { formatDate } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
+import path from "path";
 
 export const ItemTableRow = ({
 	file,
@@ -17,6 +19,8 @@ export const ItemTableRow = ({
 	onClick?: (file: File) => void,
 	onNavigate?: (file: File) => void,
 }) => {
+	const params = useSearchParams();
+	const download_path = path.join(params.get('path') ?? '/', file.name);
 	const onItemDoubleClick = () => {
 	};
 
@@ -80,7 +84,7 @@ export const ItemTableRow = ({
 			<ContextMenuContent>
 				{file.type == 'file' ?
 					<ContextMenuItem asChild>
-						<a href={`/file/u?path=${file.name}`} target="_blank" className="cursor-pointer">
+						<a href={`/file/u?path=${download_path}`} target="_blank" className="cursor-pointer">
 							Download
 						</a>
 					</ContextMenuItem>

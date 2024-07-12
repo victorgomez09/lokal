@@ -13,12 +13,14 @@ export async function GET(request: NextRequest) {
 	}
 
 	const filename = request.nextUrl.searchParams.get('path') ?? '';
+	const nameSplit = filename.split('/');
+	const attachmentName = nameSplit[nameSplit.length - 1];
 	const filePath = path.join(UPLOAD_DIR, user.rootDir, filename);
 	const body = fs.readFileSync(filePath);
 
 	return new Response(body, {
 		headers: {
-			"content-disposition": `attachment; filename="${filename}"`,
+			"content-disposition": `attachment; filename="${attachmentName}"`,
 		},
 	});
 }
