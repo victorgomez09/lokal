@@ -32,73 +32,90 @@ export default async function Settings() {
 				<h1 className="text-lg font-semibold md:text-2xl">Settings</h1>
 			</div>
 
-			<div className="space-y-6">
-				<Card className="max-w-2xl p-4">
-					<h2 className="text-base font-semibold md:text-lg mb-4">General settings</h2>
-
-					<form className="grid gap-4" action={saveServerSettings}>
-						<div className="grid gap-2">
-							<Label htmlFor="server-name">Server Name</Label>
-							<Input
-								id="server-name"
-								name="server-name"
-								placeholder="Big NAS"
-								defaultValue={settings.serverName}
-							/>
-						</div>
-
-						<div className="flex">
-							<Button className="ml-auto">Save settings</Button>
-						</div>
-					</form>
-				</Card>
-
-				<Card className="max-w-2xl">
-					<div className="p-4">
-						<h2 className="text-base font-semibold md:text-lg">Users</h2>
+			<div className="space-y-8">
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+					<div>
+						<h2 className="text-base font-semibold md:text-lg mb-4">Server settings</h2>
+						<p className="text-sm">
+							General server settings. (Only visible for owner)
+						</p>
 					</div>
 
-					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead>Name</TableHead>
-								<TableHead>Email</TableHead>
-								<TableHead>Role</TableHead>
-								<TableHead>Base Directory</TableHead>
-							</TableRow>
-						</TableHeader>
+					<Card className="col-span-2 p-4">
+						<form className="grid gap-4" action={saveServerSettings}>
+							<div className="grid gap-2">
+								<Label htmlFor="server-name">Server Name</Label>
+								<Input
+									id="server-name"
+									name="server-name"
+									placeholder="Big NAS"
+									defaultValue={settings.serverName}
+								/>
+							</div>
 
-						<TableBody>
-							{users.map((user) => {
-								return (
-									<TableRow key={user.id}>
-										<TableCell style={{ height: 49 }}>
-											<div className="flex items-center gap-2">
-												<Pen className="h-4 w-4 text-muted-foreground cursor-pointer" />
+							<div className="flex">
+								<Button className="ml-auto">Save settings</Button>
+							</div>
+						</form>
+					</Card>
+				</div>
 
-												{user.name}
-											</div>
-										</TableCell>
 
-										<TableCell>{user.email}</TableCell>
-										<TableCell>
-											{user.role == 'O' ? 'Owner' : null}
-											{user.role == 'A' ? 'Admin' : null}
-											{user.role == 'U' ? 'User' : null}
-										</TableCell>
-										<TableCell>{user.rootDir}</TableCell>
-									</TableRow>
-								);
-							})}
-						</TableBody>
-					</Table>
-
-					<div className="p-4 flex">
-						<NewUserDialog>
-							<Button className="ml-auto">Add user</Button>
-						</NewUserDialog>
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+					<div>
+						<h2 className="text-base font-semibold md:text-lg mb-4">Users</h2>
+						<p className="text-sm">
+							Manage users. (Only visible for admins)
+						</p>
 					</div>
-				</Card>
+
+					<Card className="col-span-2">
+						<div className="p-4">
+							<h2 className="text-base font-semibold md:text-lg">Users</h2>
+						</div>
+
+						<Table>
+							<TableHeader>
+								<TableRow>
+									<TableHead>Name</TableHead>
+									<TableHead>Email</TableHead>
+									<TableHead>Role</TableHead>
+									<TableHead>Base Directory</TableHead>
+								</TableRow>
+							</TableHeader>
+
+							<TableBody>
+								{users.map((user) => {
+									return (
+										<TableRow key={user.id}>
+											<TableCell style={{ height: 49 }}>
+												<div className="flex items-center gap-2">
+													<Pen className="h-4 w-4 text-muted-foreground cursor-pointer" />
+
+													{user.name}
+												</div>
+											</TableCell>
+
+											<TableCell>{user.email}</TableCell>
+											<TableCell>
+												{user.role == 'O' ? 'Owner' : null}
+												{user.role == 'A' ? 'Admin' : null}
+												{user.role == 'U' ? 'User' : null}
+											</TableCell>
+											<TableCell>{user.rootDir}</TableCell>
+										</TableRow>
+									);
+								})}
+							</TableBody>
+						</Table>
+
+						<div className="p-4 flex">
+							<NewUserDialog>
+								<Button className="ml-auto">Add user</Button>
+							</NewUserDialog>
+						</div>
+					</Card>
+				</div>
 			</div>
 		</>
 	);
