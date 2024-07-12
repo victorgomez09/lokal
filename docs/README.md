@@ -31,7 +31,7 @@ docker-compose up --build -d
 Build:
 
 ```
-docker build -t your-dockerhub-username/lokal:latest -f Dockerfile .
+docker build -t your-dockerhub-username/lokal:latest -f scripts/Dockerfile .
 ```
 
 Push to Docker Hub:
