@@ -68,18 +68,19 @@ export default function Register({
 							<div className="grid grid-cols-2 gap-4">
 								<div className="grid gap-2">
 									<Label htmlFor="first-name">First name</Label>
-									<Input name="first-name" placeholder="Max" required />
+									<Input id="first-name" name="first-name" placeholder="Max" required />
 								</div>
 
 								<div className="grid gap-2">
 									<Label htmlFor="last-name">Last name</Label>
-									<Input name="last-name" placeholder="Robinson" required />
+									<Input id="last-name" name="last-name" placeholder="Robinson" required />
 								</div>
 							</div>
 
 							<div className="grid gap-2">
 								<Label htmlFor="email">Email</Label>
 								<Input
+									id="email"
 									name="email"
 									type="email"
 									placeholder="m@example.com"
@@ -89,7 +90,7 @@ export default function Register({
 
 							<div className="grid gap-2">
 								<Label htmlFor="password">Password</Label>
-								<Input name="password" type="password" />
+								<Input id="password" name="password" type="password" />
 							</div>
 
 							<Input type="hidden" value={invite.id} name="inviteId" />
