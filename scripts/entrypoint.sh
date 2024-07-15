@@ -2,13 +2,16 @@
 
 # Run Prisma migrations if the environment variable is set
 if [ "$RUN_MIGRATIONS" = "true" ]; then
-  echo "Waiting 5s before running prisma migrate..."
+  echo "### 1. Waiting 5s before running prisma migrate ###"
   sleep 5s && npx prisma migrate deploy
-  echo "Migrate script done"
-  echo "Build next.js application"
+  echo "### 2. Migrate script done ###"
+  echo "### 3. Generate prisma client ###"
+  npx prisma generate
+  echo "### 4. All prisma jobs complete ###"
+  echo "### 5. Build next.js application ###"
   npm run build
 else
-  echo "Skipping Prisma migrations & build"
+  echo "### Skipping Prisma migrations & build ###"
 fi
 
 # Start the application
