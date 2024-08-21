@@ -53,7 +53,7 @@ export default function Register({
 	}
 
 	return (
-		<div className="w-full h-full flex items-center justify-center flex-col">
+		<div className="min-w-full min-h-full flex items-center justify-center py-6 overflow-auto">
 			<Card className="mx-auto max-w-sm">
 				<CardHeader>
 					<CardTitle className="text-xl">Sign Up</CardTitle>

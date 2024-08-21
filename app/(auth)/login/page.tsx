@@ -19,7 +19,7 @@ export default function Login() {
 	};
 
 	return (
-		<div className="w-full h-full flex flex-col items-center justify-center">
+		<div className="min-w-full min-h-full flex items-center justify-center py-6 overflow-auto">
 			<Card className="w-full max-w-sm">
 				<CardHeader>
 					<CardTitle className="text-2xl">Login</CardTitle>
