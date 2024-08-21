@@ -109,6 +109,44 @@ export async function getServerUsers() {
 	return users;
 };
 
+export async function getServerIsSetup() {
+	const users = await prisma.user.count();
+	const server_name = await prisma.setting.findUnique({
+		where: {
+			id: 'server_name',
+		}
+	});
+
+	return users > 0 || server_name?.value != null;
+};
+
+export async function setupServerAction(formData: FormData) {
+	await prisma.setting.upsert({
+		where: { id: 'server-name' },
+		update: { value: formData.get('server-name')?.toString() ?? '' },
+		create: {
+			id: 'server-name',
+			value: formData.get('server-name')?.toString() ?? '',
+		},
+	}).catch((error) => {
+		throw new Error('Could not insert server name. Message: ' + error);
+		return false;
+	});
+
+	await createUser({
+		email: formData.get('email')?.toString() ?? '',
+		password: formData.get('password')?.toString() ?? '',
+		name: (formData.get('first-name')?.toString() ?? '') + ' ' + (formData.get('last-name')?.toString() ?? ''),
+		rootDir: formData.get('rootDir')?.toString() ?? '/',
+		role: 'O',
+	}).catch((error) => {
+		throw new Error('Could not register user. Message: ' + error);
+		return false;
+	});
+
+	return true;
+};
+
 export async function getServerName() {
 	const name = await prisma.setting.findUnique({
 		where: {
