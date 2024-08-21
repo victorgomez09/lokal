@@ -10,6 +10,8 @@ services:
       - RUN_MIGRATIONS=true
     volumes:
       - /path/to/data:/app/data
+    depends_on:
+      - db
 
   db:
     image: postgres:13

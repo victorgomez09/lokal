@@ -1,13 +1,20 @@
 /** @type {import('next').NextConfig} */
-import webpack from 'webpack';
-
 const nextConfig = {
-	webpack: (config, { isServer }) => {
-		config.plugins.push(
-			new webpack.IgnorePlugin({
-				resourceRegExp: /^data\//, // Ignore all files under the 'data' directory
-			})
-		);
+	output: process.env.NEXT_OUTPUT_MODE,
+	/**
+	 *
+	 * @param {import('webpack').Configuration} config
+	 * @param {import('next/dist/server/config-shared').WebpackConfigContext} context
+	 * @returns {import('webpack').Configuration}
+	 */
+	webpack: (config) => {
+		if (process.env.NEXT_OUTPUT_MODE !== "export" || !config.module) {
+			return config;
+		}
+		config.module.rules?.push({
+			test: /data/,
+			loader: "ignore-loader",
+		});
 		return config;
 	},
 };
