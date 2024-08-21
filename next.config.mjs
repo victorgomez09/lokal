@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	output: process.env.NEXT_OUTPUT_MODE,
 	/**
 	 *
 	 * @param {import('webpack').Configuration} config
@@ -8,12 +7,9 @@ const nextConfig = {
 	 * @returns {import('webpack').Configuration}
 	 */
 	webpack: (config) => {
-		if (process.env.NEXT_OUTPUT_MODE !== "export" || !config.module) {
-			return config;
-		}
-		config.module.rules?.push({
-			test: /data/,
-			loader: "ignore-loader",
+		config.module.rules.push({
+			test: /data\/.*/,
+			loader: 'ignore-loader',
 		});
 		return config;
 	},
