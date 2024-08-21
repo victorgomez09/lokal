@@ -17,8 +17,8 @@ import { FolderUp } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { File } from "@/lib/file-utils";
 
-export const DirInput = (props: any) => {
-	const [selectedDir, setSelectedDir] = useState('');
+export const DirInput = ({ defaultValue }: { defaultValue?: string }) => {
+	const [selectedDir, setSelectedDir] = useState<string>(defaultValue ?? '');
 	const [options, setOptions] = useState<File[]>([]);
 
 	useEffect(() => {
