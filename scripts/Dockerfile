@@ -1,7 +1,7 @@
 # Dockerfile
 FROM node:20-alpine
 
-WORKDIR /app
+WORKDIR /lokal
 
 COPY package.json ./
 COPY package-lock.json ./
@@ -10,10 +10,10 @@ RUN npm install
 
 COPY . .
 
-COPY scripts/entrypoint.sh /app/scripts/entrypoint.sh
-RUN chmod +x /app/scripts/entrypoint.sh
+COPY scripts/entrypoint.sh /lokal/scripts/entrypoint.sh
+RUN chmod +x /lokal/scripts/entrypoint.sh
 
 EXPOSE 3000
 
-ENTRYPOINT ["/app/scripts/entrypoint.sh"]
+ENTRYPOINT ["/lokal/scripts/entrypoint.sh"]
 CMD ["npm", "start"]

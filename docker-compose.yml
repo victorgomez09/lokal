@@ -9,7 +9,7 @@ services:
       - DATABASE_URL=postgresql://user:password@db:5432/mydb
       - RUN_MIGRATIONS=true
     volumes:
-      - /path/to/data:/app/data
+      - /path/to/data:/lokal/data
     depends_on:
       - db
 
