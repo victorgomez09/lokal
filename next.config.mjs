@@ -6,11 +6,14 @@ const nextConfig = {
 	 * @param {import('next/dist/server/config-shared').WebpackConfigContext} context
 	 * @returns {import('webpack').Configuration}
 	 */
-	webpack: (config) => {
-		config.module.rules.push({
-			test: /data\/.*/,
-			loader: 'ignore-loader',
-		});
+	webpack: (config, { isServer }) => {
+		if (!isServer) {
+			config.module.rules.push({
+				test: /data\/.*/,
+				loader: 'ignore-loader',
+			});
+		}
+
 		return config;
 	},
 };
