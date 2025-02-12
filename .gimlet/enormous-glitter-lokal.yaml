@@ -1,0 +1,27 @@
+app: lokal
+env: enormous-glitter
+namespace: default
+chart:
+  repository: https://chart.onechart.dev
+  name: onechart
+  version: 0.70.0
+values:
+  gitRepository: victorgomez09/lokal
+  gitSha: '{{ .SHA }}'
+  image:
+    dockerfile: ""
+    registry: containerizedRegistry
+    repository: 127.0.0.1:32447/{{ .APP }}
+    strategy: buildpacks
+    tag: '{{ .SHA }}'
+  imagePullSecrets:
+    - '{{ .APP }}-containerizedregistry-pullsecret'
+  ingress:
+    host: test.localhost
+  resources:
+    ignoreLimits: true
+  vars:
+    DATABASE_URL: postgresql://postgres:password@localhost:5432/lokal
+    DISCORD_CLIENT_ID: New Value
+    DISCORD_CLIENT_SECRET: New Value
+    NEXTAUTH_URL: http://localhost:3000
